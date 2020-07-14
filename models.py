@@ -29,10 +29,16 @@ class Net(nn.Module):
         self.conv4 = nn.Conv2d(128, 256, 3, padding = 1 )
         self.batch4 = nn.BatchNorm2d(256)
         self.pool =  nn.MaxPool2d(2, 2)    
-        self.dropout = nn.Dropout(0.3)
+        self.dropout1 = nn.Dropout(0.1)
+        self.dropout2 = nn.Dropout(0.2)
+        self.dropout3 = nn.Dropout(0.3)
+        self.dropout4 = nn.Dropout(0.4)
+        self.dropout5 = nn.Dropout(0.5)
+        self.dropout6 = nn.Dropout(0.6)
         
         self.fc1 = nn.Linear(256 *14*14,1024)
-        self.fc2 = nn.Linear(1024,136)
+        self.fc2 = nn.Linear(1024,512)
+        self.fc3 = nn.Linear(512,136)
         
         
         ## Note that among the layers to add, consider including:
@@ -44,12 +50,13 @@ class Net(nn.Module):
         ## TODO: Define the feedforward behavior of this model
         ## x is the input image and, as an example, here you may choose to include a pool/conv step:
         batch_size = x.shape[0]
-        x = self.pool(self.batch1(F.relu(self.conv1(x))))
-        x = self.pool(self.batch2(F.relu(self.conv2(x))))
-        x = self.pool(self.batch3(F.relu(self.conv3(x))))
-        x = self.pool(self.batch4(F.relu(self.conv4(x))))
+        x = self.dropout1(self.pool(self.batch1(F.relu(self.conv1(x)))))
+        x = self.dropout2(self.pool(self.batch2(F.relu(self.conv2(x)))))
+        x = self.dropout3(self.pool(self.batch3(F.relu(self.conv3(x)))))
+        x = self.dropout4(self.pool(self.batch4(F.relu(self.conv4(x)))))
         x = x.view (batch_size, -1)
-        x = self.dropout(F.relu(self.fc1(x)))
-        x = self.fc2(x)
+        x = self.dropout5(F.relu(self.fc1(x)))
+        x = self.dropout6(F.relu(self.fc2(x)))
+        x = self.fc3(x)
         # a modified x, having gone through all the layers of your model, should be returned
         return x
